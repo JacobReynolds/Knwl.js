@@ -1,11 +1,17 @@
 /*
 TODO
 -------
+#1
 Interested in doing the following:
 	Sentences like '3 days from monday, 3 days from today, etc...'
 		-Issue, '3 days from monday' could mean last monday or next monday.  Need a sentence analyzer for past/present tense
 		-Issue, hard to calculate '3 days from monday' vs '3 years from monday' without it just being a lot of if statements.
-
+#2
+Issues:
+	The prefix 'in' causes some problems
+		-Ex1: 'I haven't seen you in 3 years'
+		-Ex2: 'I will see you in 3 years'
+			-Solution is much like #1 above, need to analyze tense of the sentence
 */
 function RelativeDates(knwl) {
 
