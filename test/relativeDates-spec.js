@@ -5,7 +5,7 @@ knwl.register('relativeDates', require('../experimental_plugins/relativeDates.js
 
 describe("relativeDates", function () {
 	it("should detect dates formatted like 'tomorrow'", function () {
-		knwl.init("I'd like to make an appointment for tomorrow at Church");
+		knwl.init("I will see you tomorrow");
 		var output = knwl.get("relativeDates")[0];
 		var date = (new Date()).setDate((new Date).getDate() + 1);
 		date = new Date(date);
@@ -16,7 +16,7 @@ describe("relativeDates", function () {
 		}
 	});
 
-	it("should detect dates formatted like 'tomorrow'", function () {
+	it("should detect dates formatted like 'yesterday'", function () {
 		knwl.init("I saw you yesterday");
 		var output = knwl.get("relativeDates")[0];
 		var date = (new Date()).setDate((new Date).getDate() - 1);
@@ -32,6 +32,18 @@ describe("relativeDates", function () {
 		knwl.init("I will see you next week");
 		var output = knwl.get("relativeDates")[0];
 		var date = (new Date()).setDate((new Date).getDate() + 7);
+		date = new Date(date);
+		if (output) {
+			expect(output.month + "/" + output.day + "/" + output.year).toBe((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());
+		} else {
+			throw new Error("No output object detected");
+		}
+	});
+
+	it("should detect dates formatted like 'next 3 days'", function () {
+		knwl.init("I will see you in the next 3 days");
+		var output = knwl.get("relativeDates")[0];
+		var date = (new Date()).setDate((new Date).getDate() + 3);
 		date = new Date(date);
 		if (output) {
 			expect(output.month + "/" + output.day + "/" + output.year).toBe((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());
@@ -100,10 +112,10 @@ describe("relativeDates", function () {
 		}
 	});
 
-	it("should detect dates formatted like 'x weeks ago'", function () {
-		knwl.init("I haven't seen in you in the last 3 weeks");
+	it("should detect dates formatted like 'x years ago'", function () {
+		knwl.init("I haven't seen in you in the last 3 years");
 		var output = knwl.get("relativeDates")[0];
-		var date = (new Date()).setDate((new Date).getDate() - 21);
+		var date = (new Date()).setFullYear((new Date).getFullYear() - 3);
 		date = new Date(date);
 		if (output) {
 			expect(output.month + "/" + output.day + "/" + output.year).toBe((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());

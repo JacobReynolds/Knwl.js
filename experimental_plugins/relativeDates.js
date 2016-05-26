@@ -7,7 +7,6 @@ Interested in doing the following:
 		-Issue, hard to calculate '3 days from monday' vs '3 years from monday' without it just being a lot of if statements.
 
 */
-
 function RelativeDates(knwl) {
 
 	this.languages = { //supported languages
@@ -31,71 +30,67 @@ function RelativeDates(knwl) {
 		create: function (length) {
 			return -length || -1;
 		}
-			}, {
+    }, {
 		prefix: 'since',
 		create: function (length) {
 			return -length || -1;
 		}
-			}, {
+    }, {
 		prefix: 'next',
-		create: function () {
-			return 1;
+		create: function (length) {
+			return length || 1;
 		}
-			}, {
+    }, {
 		prefix: 'last',
 		create: function (length) {
 			return -length || -1;
 		}
-		}, {
+    }, {
 		prefix: 'after',
 		create: function (length) {
 			return length || 1;
 		}
-		}, {
+    }, {
 		prefix: 'in',
 		create: function (length) {
 			return length || 1;
 		}
-		}]
+    }]
 	this.dates.roots = [{
-			root: 'tomorrow',
-			create: function () {
-				return (new Date).setDate((new Date).getDate() + 1);
-			}
-			}, {
-			root: 'yesterday',
-			create: function () {
-				return (new Date).setDate((new Date).getDate() - 1);
-			}
-				},
-		{
-			root: 'day',
-			create: function (prefix, length) {
-				var days = relativeDates.dates.getPrefix(prefix).create(length);
-				return (new Date).setDate((new Date).getDate() + days);
-			}
-			},
-		{
-			root: 'week',
-			create: function (prefix, length) {
-				var days = relativeDates.dates.getPrefix(prefix).create(length);
-				return (new Date).setDate((new Date).getDate() + (days * 7));
-			}
-			},
-		{
-			root: 'month',
-			create: function (prefix, length) {
-				var months = relativeDates.dates.getPrefix(prefix).create(length);
-				return (new Date).setMonth((new Date).getMonth() + months);
-			}
-			},
-		{
-			root: 'year',
-			create: function (prefix, length) {
-				var years = relativeDates.dates.getPrefix(prefix).create(length);
-				return (new Date).setFullYear((new Date).getFullYear() + years);
-			}
-			}]
+		root: 'tomorrow',
+		create: function () {
+			return (new Date).setDate((new Date).getDate() + 1);
+		}
+    }, {
+		root: 'yesterday',
+		create: function () {
+			return (new Date).setDate((new Date).getDate() - 1);
+		}
+    }, {
+		root: 'day',
+		create: function (prefix, length) {
+			var days = relativeDates.dates.getPrefix(prefix).create(length);
+			return (new Date).setDate((new Date).getDate() + days);
+		}
+    }, {
+		root: 'week',
+		create: function (prefix, length) {
+			var days = relativeDates.dates.getPrefix(prefix).create(length);
+			return (new Date).setDate((new Date).getDate() + (days * 7));
+		}
+    }, {
+		root: 'month',
+		create: function (prefix, length) {
+			var months = relativeDates.dates.getPrefix(prefix).create(length);
+			return (new Date).setMonth((new Date).getMonth() + months);
+		}
+    }, {
+		root: 'year',
+		create: function (prefix, length) {
+			var years = relativeDates.dates.getPrefix(prefix).create(length);
+			return (new Date).setFullYear((new Date).getFullYear() + years);
+		}
+    }]
 
 	this.dates.getPrefix = function (prefix) {
 		var prefixes = relativeDates.dates.prefixes;
