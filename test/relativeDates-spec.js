@@ -148,7 +148,7 @@ describe("relativeDates", function () {
 		}
 	});
 
-	it("should detect dates formatted like 'in x days'", function () {
+	it("should detect dates formatted like 'in x days' for future", function () {
 		knwl.init("I will see you in 9 days");
 		var output = knwl.get("relativeDates")[0];
 		var date = (new Date()).setDate((new Date).getDate() + 9);
@@ -160,7 +160,19 @@ describe("relativeDates", function () {
 		}
 	});
 
-	it("should detect dates formatted like 'in x days'", function () {
+	it("should detect dates formatted like 'in x days' for past", function () {
+		knwl.init("I haven't seen you in 9 days");
+		var output = knwl.get("relativeDates")[0];
+		var date = (new Date()).setDate((new Date).getDate() - 9);
+		date = new Date(date);
+		if (output) {
+			expect(output.month + "/" + output.day + "/" + output.year).toBe((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());
+		} else {
+			throw new Error("No output object detected");
+		}
+	});
+
+	it("should detect dates formatted like 'in x weeks' for future", function () {
 		knwl.init("I will see you in 9 weeks");
 		var output = knwl.get("relativeDates")[0];
 		var date = (new Date()).setDate((new Date).getDate() + (9 * 7));
@@ -172,7 +184,19 @@ describe("relativeDates", function () {
 		}
 	});
 
-	it("should detect dates formatted like 'in x days'", function () {
+	it("should detect dates formatted like 'in x weeks' for past", function () {
+		knwl.init("I haven't seen you in 9 weeks");
+		var output = knwl.get("relativeDates")[0];
+		var date = (new Date()).setDate((new Date).getDate() - (9 * 7));
+		date = new Date(date);
+		if (output) {
+			expect(output.month + "/" + output.day + "/" + output.year).toBe((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());
+		} else {
+			throw new Error("No output object detected");
+		}
+	});
+
+	it("should detect dates formatted like 'in x months' for future", function () {
 		knwl.init("I will see you in 9 months");
 		var output = knwl.get("relativeDates")[0];
 		var date = (new Date()).setMonth((new Date).getMonth() + 9);
@@ -184,10 +208,34 @@ describe("relativeDates", function () {
 		}
 	});
 
-	it("should detect dates formatted like 'in x years'", function () {
+	it("should detect dates formatted like 'in x months' for past", function () {
+		knwl.init("I haven't seen you in 9 months");
+		var output = knwl.get("relativeDates")[0];
+		var date = (new Date()).setMonth((new Date).getMonth() - 9);
+		date = new Date(date);
+		if (output) {
+			expect(output.month + "/" + output.day + "/" + output.year).toBe((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());
+		} else {
+			throw new Error("No output object detected");
+		}
+	});
+
+	it("should detect dates formatted like 'in x years' for future", function () {
 		knwl.init("I will see you in 9 years");
 		var output = knwl.get("relativeDates")[0];
 		var date = (new Date()).setFullYear((new Date).getFullYear() + 9);
+		date = new Date(date);
+		if (output) {
+			expect(output.month + "/" + output.day + "/" + output.year).toBe((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());
+		} else {
+			throw new Error("No output object detected");
+		}
+	});
+
+	it("should detect dates formatted like 'in x years' for past", function () {
+		knwl.init("I haven't seen you in 9 years");
+		var output = knwl.get("relativeDates")[0];
+		var date = (new Date()).setFullYear((new Date).getFullYear() - 9);
 		date = new Date(date);
 		if (output) {
 			expect(output.month + "/" + output.day + "/" + output.year).toBe((date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear());
@@ -200,6 +248,21 @@ describe("relativeDates", function () {
 		knwl.init("I will see you in 3 days and then in 9 years");
 		var output = knwl.get("relativeDates");
 		var date1 = (new Date()).setDate((new Date).getDate() + 3);
+		var date2 = (new Date()).setFullYear((new Date).getFullYear() + 9);
+		date1 = new Date(date1);
+		date2 = new Date(date2);
+		if (output.length === 2) {
+			expect(output[0].month + "/" + output[0].day + "/" + output[0].year).toBe((date1.getMonth() + 1) + "/" + date1.getDate() + "/" + date1.getFullYear());
+			expect(output[1].month + "/" + output[1].day + "/" + output[1].year).toBe((date2.getMonth() + 1) + "/" + date2.getDate() + "/" + date2.getFullYear());
+		} else {
+			throw new Error("No output object detected");
+		}
+	});
+
+	it("should detect dates formatted with multiple days and tenses", function () {
+		knwl.init("I haven't seen you in 3 days and but I will see you in 9 years");
+		var output = knwl.get("relativeDates");
+		var date1 = (new Date()).setDate((new Date).getDate() - 3);
 		var date2 = (new Date()).setFullYear((new Date).getFullYear() + 9);
 		date1 = new Date(date1);
 		date2 = new Date(date2);

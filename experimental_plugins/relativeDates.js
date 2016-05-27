@@ -14,8 +14,8 @@ Issues:
 			-Solution is much like #1 above, need to analyze tense of the sentence
 */
 function RelativeDates(knwl) {
-	var compendium = require('compendium-js');
 	var pastTenseTokens = ['VBD', 'VBN']
+	this.compendium = require('compendium-js');
 	this.languages = { //supported languages
 		english: true
 	};
@@ -58,8 +58,9 @@ function RelativeDates(knwl) {
 		}
     }, {
 		prefix: 'in',
-		create: function (length) {
-			return length || 1;
+		create: function (length, tense) {
+			//If tense is 1 that means future/present, 0 means past
+			return tense ? -length || -1 : length || 1;
 		}
     }]
 	this.dates.roots = [{
@@ -74,26 +75,26 @@ function RelativeDates(knwl) {
 		}
     }, {
 		root: 'day',
-		create: function (prefix, length) {
-			var days = relativeDates.dates.getPrefix(prefix).create(length);
+		create: function (prefix, length, tense) {
+			var days = relativeDates.dates.getPrefix(prefix).create(length, tense);
 			return (new Date).setDate((new Date).getDate() + days);
 		}
     }, {
 		root: 'week',
-		create: function (prefix, length) {
-			var days = relativeDates.dates.getPrefix(prefix).create(length);
+		create: function (prefix, length, tense) {
+			var days = relativeDates.dates.getPrefix(prefix).create(length, tense);
 			return (new Date).setDate((new Date).getDate() + (days * 7));
 		}
     }, {
 		root: 'month',
-		create: function (prefix, length) {
-			var months = relativeDates.dates.getPrefix(prefix).create(length);
+		create: function (prefix, length, tense) {
+			var months = relativeDates.dates.getPrefix(prefix).create(length, tense);
 			return (new Date).setMonth((new Date).getMonth() + months);
 		}
     }, {
 		root: 'year',
-		create: function (prefix, length) {
-			var years = relativeDates.dates.getPrefix(prefix).create(length);
+		create: function (prefix, length, tense) {
+			var years = relativeDates.dates.getPrefix(prefix).create(length, tense);
 			return (new Date).setFullYear((new Date).getFullYear() + years);
 		}
     }]
@@ -120,11 +121,11 @@ function RelativeDates(knwl) {
 
 		//for dates like "tomorrow", "next week", "3 days ago" (relative)
 		for (var i = 0; i < words.length; i++) {
-			this.createRelativeDateObject = function (workableRoot, workablePrefix, number) {
+			this.createRelativeDateObject = function (workableRoot, workablePrefix, number, tense) {
 				var result;
 				var dateObj = {};
 				try {
-					result = new Date(workableRoot.create(workablePrefix, Number(number)));
+					result = new Date(workableRoot.create(workablePrefix, Number(number), tense));
 				} catch (err) {
 					console.log(err);
 					return;
@@ -135,24 +136,26 @@ function RelativeDates(knwl) {
 				results.push(dateObj);
 			}
 
-
 			var root = words[i] //[i + 1];
 			var prefix = words[i - 1]; //[i];
 			var number = words[i - 2]; //[i - 1];
 			var workableRoot = relativeDates.dates.getRoot(root);
 			var workablePrefix = relativeDates.dates.getPrefix(prefix);
+			var currentString = words.slice(0, i + 1).join(' ');
+			var tense = relativeDates.compendium.analyse(currentString)[0];
+			tense = tense.profile.nearest_verb_tense === 'present' ? 0 : 1;
 			//Need to worry about phrases like "in 3 days", "3 days from now"
 			if (!isNaN(number)) {
 				if (workableRoot) {
 					if (workablePrefix) {
-						relativeDates.createRelativeDateObject(workableRoot, workablePrefix.prefix, Number(number));
+						relativeDates.createRelativeDateObject(workableRoot, workablePrefix.prefix, Number(number), tense);
 					}
 				} else {
 					var workablePrefix = relativeDates.dates.getPrefix(root);
 					if (workablePrefix) {
 						workableRoot = relativeDates.dates.getRoot(prefix);
 						if (workableRoot) {
-							relativeDates.createRelativeDateObject(workableRoot, workablePrefix.prefix, Number(number));
+							relativeDates.createRelativeDateObject(workableRoot, workablePrefix.prefix, Number(number), tense);
 						}
 					}
 				}
@@ -161,7 +164,7 @@ function RelativeDates(knwl) {
 				if (workablePrefix) {
 					number = prefix;
 					if (workableRoot) {
-						relativeDates.createRelativeDateObject(workableRoot, workablePrefix.prefix, Number(number));
+						relativeDates.createRelativeDateObject(workableRoot, workablePrefix.prefix, Number(number), tense);
 					}
 				}
 			} else {
