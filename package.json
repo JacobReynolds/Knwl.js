@@ -30,6 +30,7 @@
     "test": "scripts/test.sh"
   },
   "dependencies": {
+    "compendium-js": "0.0.25",
     "phoneformat.js": "^1.0.3"
   }
 }

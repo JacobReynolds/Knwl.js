@@ -196,4 +196,19 @@ describe("relativeDates", function () {
 		}
 	});
 
+	it("should detect dates formatted with multiple days", function () {
+		knwl.init("I will see you in 3 days and then in 9 years");
+		var output = knwl.get("relativeDates");
+		var date1 = (new Date()).setDate((new Date).getDate() + 3);
+		var date2 = (new Date()).setFullYear((new Date).getFullYear() + 9);
+		date1 = new Date(date1);
+		date2 = new Date(date2);
+		if (output.length === 2) {
+			expect(output[0].month + "/" + output[0].day + "/" + output[0].year).toBe((date1.getMonth() + 1) + "/" + date1.getDate() + "/" + date1.getFullYear());
+			expect(output[1].month + "/" + output[1].day + "/" + output[1].year).toBe((date2.getMonth() + 1) + "/" + date2.getDate() + "/" + date2.getFullYear());
+		} else {
+			throw new Error("No output object detected");
+		}
+	});
+
 })

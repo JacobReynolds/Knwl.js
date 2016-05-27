@@ -14,7 +14,8 @@ Issues:
 			-Solution is much like #1 above, need to analyze tense of the sentence
 */
 function RelativeDates(knwl) {
-
+	var compendium = require('compendium-js');
+	var pastTenseTokens = ['VBD', 'VBN']
 	this.languages = { //supported languages
 		english: true
 	};
