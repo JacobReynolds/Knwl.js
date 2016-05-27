@@ -18,7 +18,6 @@ function RelativeDates(knwl) {
 	this.languages = { //supported languages
 		english: true
 	};
-	this.dayAbbrs = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
 	this.constructDateObj = function (year, month, day) {
 		return {
