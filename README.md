@@ -1,7 +1,7 @@
 # Knwl.js
 Knwl.js is a Javascript library that parses through text for dates, times, phone numbers, emails, places, and more. 
 
-#Jake's contributions
+# Jake's contributions
 I added a new plugin under the experimental_plugins directory for parsing relative dates ('last week', '4 days from now', etc...).  There are 2 branches of this fork, one for basic relative dates, and one that uses <a target="_blank" href="https://github.com/JacobReynolds/compendium-js">compendium.js</a> for sentence analyzing which strengthens the parsing ability.
 <hr>
 Parser plugins are what make Knwl.js tick and give it new parsing abilities. There are many already available under ```./default_plugins``` for a number of tasks.
